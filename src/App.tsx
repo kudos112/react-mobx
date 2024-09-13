@@ -1,35 +1,28 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { observer } from "mobx-react-lite";
+import "./App.css";
+import store from "./store";
+import TodoView from "./TodoView";
 
-function App() {
-  const [count, setCount] = useState(0)
-
+const App = observer(() => {
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <div className="container">
+      <h1>Todo App</h1>
+      <div className="input-container">
+        <input
+          type="text"
+          value={store.todo}
+          onChange={(e) => (store.todo = e.target.value)}
+          placeholder="Add new task"
+        />
+        <button onClick={store.addTodo}>Add</button>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+      <ul className="todo-list">
+        {store.todos.map((todo, index) => (
+          <TodoView key={index} index={index} todo={todo} />
+        ))}
+      </ul>
+    </div>
+  );
+});
 
-export default App
+export default App;
